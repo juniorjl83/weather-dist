@@ -14,8 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.ws.rs.core.Response;
+
+import static com.crossover.trial.weather.service.RestWeatherCollectorEndpoint.addAirport;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WeatherEndpointTest {
 
@@ -85,4 +90,14 @@ public class WeatherEndpointTest {
     assertEquals(ais.get(0).getCloudCover(), cloudCoverDp);
   }
 
+  @Test
+  public void testDelete() throws Exception {
+
+    int status = update.deleteAirport("EWR").getStatus();
+    assertEquals(200, status);
+    
+    Set<String> airports = (Set<String>) update.getAirports().getEntity();
+    assertTrue(airports.size() == 4);
+    
+  }
 }

@@ -32,7 +32,7 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
       Logger.getLogger(RestWeatherCollectorEndpoint.class.getName());
 
   /** shared gson json to object factory. */
-  public static final  Gson gson = new Gson();
+  public static final Gson gson = new Gson();
 
   /*
    * (non-Javadoc)
@@ -110,9 +110,17 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
    * @see
    * com.crossover.trial.weather.service.WeatherCollectorEndpoint#deleteAirport(java.lang.String)
    */
+  /* (non-Javadoc)
+   * @see com.crossover.trial.weather.service.WeatherCollectorEndpoint#deleteAirport(java.lang.String)
+   */
   @Override
   public Response deleteAirport(@PathParam("iata") String iata) {
-    return Response.status(Response.Status.NOT_IMPLEMENTED).build();
+    if (deleteAirportbyIata(iata)) {
+      return Response.status(Response.Status.OK).build();
+    } else {
+      return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
   }
 
   /*
@@ -210,4 +218,17 @@ public class RestWeatherCollectorEndpoint implements WeatherCollectorEndpoint {
     ad.setLatitude(longitude);
     return ad;
   }
+
+  public boolean deleteAirportbyIata(String iata) {
+    
+    AirportData ad = findAirportData(iata);
+    int index = airportData.indexOf(ad);
+    if ( ad != null ){
+      airportData.remove(index);
+      atmosphericInformation.remove(index);
+      return Boolean.TRUE;
+    }
+    return false;
+  }
+
 }
